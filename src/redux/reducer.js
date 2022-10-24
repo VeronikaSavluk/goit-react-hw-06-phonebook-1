@@ -1,34 +1,31 @@
 import { combineReducers } from "redux";
-import { statusFilters } from "./constans";
 
 const contactsInitialState = [];
 
 const contactsReducer = (state = contactsInitialState, action) => {
   switch (action.type) {
-    case "addContact":
-      return [...state.contacts, action.payload];
-    case "deleteContact":
-      return state.contacts.filter(contact => contact.id !== action.payload);
+    case "contacts/addContact":
+      return [...state, action.payload];
+    case "contacts/deleteContact":
+      return state.filter(contact => contact.id !== action.payload);
     default:
       return state;
   }
 };
 
-const filtersInitialState = "";
+const filterInitialState = "";
 
-const filtersReducer = (state = filtersInitialState, action) => {
+const filterReducer = (state = filterInitialState, action) => {
+  console.log(state.contacts);
   switch (action.type) {
-    case "setFilter":
-      return {
-        ...state,
-        status: action.payload,
-      };
+    case "filter/setFilter":
+      return state.filter(contact => contact.name.toLowerCase().includes(action.payload));
     default:
       return state;
   }
 };
 
 export const rootReducer = combineReducers({
-    tasks: contactsReducer,
-    filters: filtersReducer,
+    contacts: contactsReducer,
+    filter: filterReducer,
   });

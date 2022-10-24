@@ -16,10 +16,10 @@ const contactsReducer = (state = contactsInitialState, action) => {
 const filterInitialState = "";
 
 const filterReducer = (state = filterInitialState, action) => {
-  console.log(state.contacts);
+
   switch (action.type) {
     case "filter/setFilter":
-      return state.filter(contact => contact.name.toLowerCase().includes(action.payload));
+      return action.payload;
     default:
       return state;
   }

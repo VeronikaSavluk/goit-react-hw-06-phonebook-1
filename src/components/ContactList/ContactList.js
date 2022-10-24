@@ -1,16 +1,20 @@
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from "react-redux";
 import { deleteContact } from 'redux/actions';
-import { getContacts } from 'redux/selectors';
+import { getContacts, getFilter } from 'redux/selectors';
 import { List, ContactItem, DataContact, Delete } from './ContactList.styled';
 
 const ContactList = () => {
-    const contacts = useSelector(getContacts);
     const dispatch = useDispatch();
+    const contacts = useSelector(getContacts);
+    const filter = useSelector(getFilter);
+    const visibleContacts = filter
+        ? contacts.filter(contact => contact.name.toLowerCase().includes(filter))
+        : contacts;
 
     return (
         <List>
-            {contacts.map(({id, name, number}) => (
+            {visibleContacts.map(({id, name, number}) => (
                 <ContactItem key={id}>
                     <DataContact>{name}:</DataContact>
                     <DataContact>{number}</DataContact>
@@ -22,7 +26,7 @@ const ContactList = () => {
 }
 
 ContactList.propTypes = {
-    contacts: PropTypes.arrayOf(
+    visibleContacts: PropTypes.arrayOf(
         PropTypes.exact({
             name: PropTypes.string.isRequired,
             number: PropTypes.string.isRequired,
